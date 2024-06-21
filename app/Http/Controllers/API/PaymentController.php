@@ -23,7 +23,7 @@ class PaymentController extends BaseController
     {
         $payments = Payment::all();
         
-        return $this->sendResponse(PaymentResource::collection($payments), 'Payments retrieved successfully.');
+        return $this->sendResponse(PaymentResource::collection($payments), 'Payments retrieved successfully.',200);
     }
 
     public function store(Request $request): JsonResponse
@@ -61,14 +61,21 @@ class PaymentController extends BaseController
        
        
         DB::commit();
-        return $this->sendResponse(new PaymentResource($payment), 'Payment created successfully.');
+        return $this->sendResponse(new PaymentResource($payment), 'Payment created successfully.',201);
     } catch (Exception $ex) {
         DB::rollBack();
         return $this->sendError('Please Try Again.',$ex->getMessage()); 
     }
     } 
 
-    public function changeStatus(Request $request){
+    public function paymentApproval(Request $request){
+      $transaction_id =  $request->transaction_id;
+      $payment = Payment::where('transaction_id',$transaction_id)->first();
+      $payment->status = true;
+      $payment->approvedBy = Auth::user()->id;
+      $payment->save();
+
+      return $this->sendResponse(new PaymentResource($payment), 'Payment approved successfully.',201);
 
     }
 }
