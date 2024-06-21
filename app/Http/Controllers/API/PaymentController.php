@@ -68,8 +68,7 @@ class PaymentController extends BaseController
     }
     } 
 
-    public function paymentApproval(Request $request){
-      $transaction_id =  $request->transaction_id;
+    public function paymentApproval($transaction_id){
       $payment = Payment::where('transaction_id',$transaction_id)->first();
       $payment->status = true;
       $payment->approvedBy = Auth::user()->id;

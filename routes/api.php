@@ -25,7 +25,7 @@ Route::get('mockresponse-failed', [TestController::class, 'failStatus'])->name('
 Route::middleware('auth:sanctum')->group(function () {
 Route::get('get-payments', [PaymentController::class, 'index'])->name('payments');
 Route::post('store-payments', [PaymentController::class, 'store'])->name('payment-store');
-Route::post('changeStatus', [PaymentController::class, 'paymentApproval'])->name('change-status');
+Route::post('changeStatus/{transaction_id}', [PaymentController::class, 'paymentApproval'])->name('change-status');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 });
